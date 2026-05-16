@@ -27,15 +27,17 @@ cd ..
 if [ ! -f server/.env ]; then
   echo ""
   echo "[3/5] Creating server/.env file..."
-  cat > server/.env << 'EOF'
+  CURRENT_USER=$(whoami)
+  cat > server/.env << EOF
 PORT=5000
-DATABASE_URL=postgresql://$(whoami)@localhost:5432/cybershield_x?host=/tmp
+DATABASE_URL=postgresql://${CURRENT_USER}@localhost:5432/cybershield_x
 JWT_SECRET=cybershield_x_jwt_secret_key_2024
 CSRF_SECRET=cybershield_x_csrf_secret_key_2024
 SESSION_SECRET=cybershield_x_session_secret_2024
 NODE_ENV=development
 EOF
-  echo "     Created server/.env — EDIT THIS if your PostgreSQL setup is different!"
+  echo "     Created server/.env with user: ${CURRENT_USER}"
+  echo "     EDIT server/.env if your PostgreSQL setup uses a different user/password!"
 else
   echo ""
   echo "[3/5] server/.env already exists, skipping"
@@ -60,7 +62,7 @@ echo "========================================"
 echo "  Setup Complete!"
 echo "========================================"
 echo ""
-echo "  To run the project:"
+echo "  Now open TWO terminals and run:"
 echo ""
 echo "  Terminal 1 (Backend):"
 echo "    cd server && npm run dev"
